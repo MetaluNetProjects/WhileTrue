@@ -1,0 +1,88 @@
+http://arduino.stackexchange.com/questions/3680/in-linux-how-to-identify-multiple-arduinos-connected-over-usb
+
+----------------------------------------------------
+
+
+
+grep "ftdi" /var/log/messages
+dmesg | grep "ftdi"
+
+Next to ftdi_sio, there is a number like 1-1.2. This is the USB device
+
+dmesg | grep "usb 1-1.3"
+
+Get SerialNumber (ex A601ERJJ )
+Create a new file called 99-usb-serial.rules and put the following lines in there:
+In this example my alias is called 'lcdbox'
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="A601ERJJ", SYMLINK+="lcdbox"
+
+sudo udevadm control --reload-rules
+ls -l /dev/lcdbox
+
+
+
+
+----------------------------------------------------
+First, get ftdi_eeprom via apt-get or from the sources. Identify your device via lsusb and get the id:
+
+lsusb
+
+Bus 001 Device 005: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
+....
+Prepare a config and make sure, that vendor_id and product_id match. Customize the strings in the Strings section to get a unique id for your device.
+
+#-----------------------------------
+vendor_id=0x0403    # Vendor ID
+product_id=0x6001   # Product ID
+
+max_power=50        # Max. power consumption: value * 2 mA. Use 0 if self_powered = true.
+
+###########
+# Strings #
+########### 
+manufacturer="FTDI"     # Manufacturer
+product="Arduino Nano"      # Product
+serial="arduino1"       # Serial
+
+###########
+# Options #
+###########
+self_powered=false  # Turn this off for bus powered
+remote_wakeup=false # Turn this on for remote wakeup feature
+use_serial=true     # Use the serial number string
+
+# Normally out don't have to change one of these flags
+# BM_type_chip=true         # Newer chips are all BM type
+in_is_isochronous=false     # In Endpoint is Isochronous
+out_is_isochronous=false    # Out Endpoint is Isochronous
+suspend_pull_downs=false    # Enable suspend pull downs for lower power
+change_usb_version=false    # Change USB Version
+usb_version=0x0200      # Only used when change_usb_version is enabled
+
+########
+# Misc #
+########
+
+filename="eeprom.old"   # Filename, leave empty to skip file writing
+cbus0=RXLED#
+cbus1=TXLED#
+#------------------------------------
+
+Dump the current ftdi-firmware:
+
+ftdi_eeprom --read-eprom
+
+This command creates ${pwd}/eeprom.old, which contains the current firmware on the ftdi. Backup this file before continuing, because during flash-eeprom the file gets rewritten. After the backup, flash the ftdi:
+
+ftdi_eeprom --flash-eeprom myconfig.conf
+Now, create an udev rule, like so
+
+SUBSYSTEMS=="usb", ATTRS{idProduct}=="6001", ATTRS{idVendor}=="0403", SYMLINK+="$attr{serial}", OWNER="bananapi", GROUP="pi", MODE="0777"
+in /etc/udev/rules.d/90-arduino-usb.rules and restart udev.
+
+service udev restart
+Unplug and re-plug your device and try
+
+ls -lah /dev/arduino1
+Where arduino1 is the string defined under serial in the above .conf.
