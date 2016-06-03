@@ -1,4 +1,4 @@
-#N canvas 568 245 488 321 10;
+#N canvas 571 121 488 321 10;
 #X declare -stdpath moonlib;
 #X declare -stdpath zexy -stdlib zexy -lib zexy;
 #X declare -lib Gem;
@@ -447,7 +447,6 @@
 #X restore 388 16 pd tests;
 #X obj 385 73 tgl 25 0 empty empty empty 17 7 0 10 -4034 -1 -1 0 1
 ;
-#X obj 43 102 MarlinDriver 0 0;
 #N canvas 574 150 594 590 Sequencer 0;
 #X obj 179 201 textfile;
 #X obj 179 182 r \$0-totextfile;
@@ -632,8 +631,8 @@
 #X msg 216 165 test2;
 #X obj 42 77 ATEMface;
 #X obj 42 52 declare -path ATEM -path 3Dctl;
-#X obj 43 172 MarlinDriver 1 1;
-#X obj 43 241 MarlinDriver 2 2;
+#X obj 43 108 MarlinDriver 1 1;
+#X obj 43 177 MarlinDriver 2 2;
 #N canvas 1 95 620 410 tests2 0;
 #X obj 202 333 s SeqMsg;
 #X msg 201 199 speed0 1 \, pos0 57 54 0.2;
@@ -669,9 +668,10 @@
 #X connect 15 0 14 0;
 #X connect 17 0 14 0;
 #X restore 388 40 pd tests2;
+#X obj 43 246 MarlinDriver 3 3;
 #X connect 4 0 2 0;
-#X connect 6 0 8 0;
-#X connect 6 1 9 0;
-#X connect 7 0 6 0;
-#X connect 10 0 6 0;
-#X connect 11 0 6 0;
+#X connect 5 0 7 0;
+#X connect 5 1 8 0;
+#X connect 6 0 5 0;
+#X connect 9 0 5 0;
+#X connect 10 0 5 0;

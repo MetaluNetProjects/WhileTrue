@@ -1,0 +1,4 @@
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="9523335313135171C051", SYMLINK+="arduino1"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="95233353131351610201", SYMLINK+="arduino2"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="95233353131351118290", SYMLINK+="arduino3"
+

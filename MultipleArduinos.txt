@@ -17,6 +17,12 @@ In this example my alias is called 'lcdbox'
 
 SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="A601ERJJ", SYMLINK+="lcdbox"
 
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="9523335313135171C051", SYMLINK+="arduino1"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="95233353131351610201", SYMLINK+="arduino2"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0042", ATTRS{serial}=="95233353131351118290", SYMLINK+="arduino3"
+
+
+
 sudo udevadm control --reload-rules
 ls -l /dev/lcdbox
 
